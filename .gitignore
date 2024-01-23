@@ -11,4 +11,6 @@
 
 **/build/*
 
+*.pdf
+
 !**/build/*.pdf
