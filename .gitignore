@@ -13,6 +13,8 @@
 
 *.pdf
 
+/__pycache__
+
 !**/build/*.pdf
 
 !**/*.hs
