@@ -10,6 +10,12 @@ def TruePercRelError(TrueValue:float,AproxValue:float):
 def AproxPercRelError(PresAprox:float,PrevAprox:float):
   return abs((1 - PrevAprox/PresAprox)*100)
 
+def AproxErrorList(Vals:list):
+  Errors = ["-"]
+  for i in range(1,len(Vals)):
+    Errors += [f"{AproxPercRelError(Vals[i],Vals[i-1])} %"]
+  return Errors
+
 # Aproximación de Raices - Métodos Cerrados
 def Bisec(f:float,x_l:float,x_u:float,n:int=1,E:float=100,Iter:bool=True):
   """Método de Bisección
