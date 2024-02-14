@@ -213,6 +213,7 @@ def NewtonRaphson(f:float,df:float,x:float,n:int=1,E:float=100,Iter:bool=True):
   while AproxPercRelError(x,x_a) > E:
     if f(x) == 0 or df(x) == 0:
         return x
+    x_a = x
     x = x - f(x)/df(x)
   return x
 
