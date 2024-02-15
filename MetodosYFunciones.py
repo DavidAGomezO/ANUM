@@ -296,3 +296,45 @@ def ModSecant(f:float,x:float,d:float,n:int=1,E:float=100,Iter:bool=True):
       return x
     x = x - (d*f(x))/(f(x+d) - f(x))
   return x
+
+def ModNewtonRaphson(f:float,df:float,ddf:float,x:float,n:int=1,E:float=100,Iter:bool=True):
+  """Método de aproximación de raíz Newton Raphson modificado
+
+  Parameters
+  ----------
+  f : float
+      Función de la que se quiere aproximar la raíz
+  df : float
+      Derivada de la función f
+  x : float
+      Punto inicial para el algoritmo
+  n : int, opcional
+      Número de iteraciones deseadas, por defecto 1
+  E : float, opcional
+      Error deseado, por defecto 100
+  Iter : bool, opcional
+      Determina si el proceso se debe realizar con iteraciones o hasta
+      obtener un error deseado, por defecto True
+
+    Returns
+  -------
+    float
+        Aproximación obtenida
+  """
+  if f(x) == 0 or (df(x))**2 == f(x)*ddf(x):
+    return x
+  if Iter:
+    for i in range(1,n+1):
+      if f(x) == 0 or (df(x))**2 == f(x)*ddf(x):
+        return x
+      x = x - (f(x)*df(x))/((df(x))**2 - f(x)*ddf(x))
+    return x
+  
+  x_a = x
+  x = x - (f(x)*df(x))/((df(x))**2 - f(x)*ddf(x))
+  while AproxPercRelError(x,x_a) > E:
+    if f(x) == 0 or (df(x))**2 == f(x)*ddf(x):
+      return x
+    x_a = x
+    x = x - (f(x)*df(x))/((df(x))**2 - f(x)*ddf(x))
+  return x
