@@ -1,6 +1,7 @@
 import math
 import MetodosYFunciones as MF
 import pandas as pd
+import matplotlib.pyplot as plt
 PI = math.pi  
 E = math.e
 COS = lambda x: math.cos(x)
@@ -9,6 +10,42 @@ TAN = lambda x: math.tan(x)
 SEC = lambda x: 1/math.cos(x)
 CSC = lambda x: 1/math.sin(x)
 
+# Punto 3
+D = 87.28
+l = 359.41
+b1 = 11.5*PI/180
+h = [10*i for i in range(0,31)]
+Err = 10**(-5)
+
+A = l*SIN(b1)
+B = l*COS(b1)
+C = [(h[i] + 0.5*D)*SIN(b1) - 0.5*D*TAN(b1) for i in range(0,len(h))]
+E = [(h[i] + 0.5*D)*COS(b1) - 0.5*D for i in range(0,len(h))]
+
+def func(c,e):
+  def aux(a):
+    return A*SIN(a)*COS(a) + B*(SIN(a))**2 - c*COS(a) - e*SIN(a)
+  return aux
+
+def dfunc(c,e):
+  def aux(a):
+    return A*((COS(a))**2 - (SIN(a))**2) + 2*B*SIN(a)*COS(a) + c*COS(a) + e*SIN(a)
+  return aux
+
+FUNCS = [func(C[i],E[i]) for i in range(0,len(h))]
+DFUNCS = [dfunc(C[i],E[i]) for i in range(0,len(h))]
+
+aVals = [MF.NewtonRaphson(FUNCS[0],DFUNCS[0],3,E=Err,Iter=False)] + [MF.NewtonRaphson(FUNCS[i],DFUNCS[i],1,E=Err,Iter=False) for i in range(1,31)]
+aValsDeg = [aVals[i]*180/PI for i in range(0,31)]
+
+Vals = {'h':h,'a':aVals}
+df = pd.DataFrame(Vals)
+print(df.to_string(index=False))
+
+plt.scatter(h,aValsDeg,marker=".",s=10)
+plt.xlabel("h")
+plt.ylabel("alpha")
+plt.show()
 # Taller, Punto 6
 l = 359.41
 D = 87.28
