@@ -55,7 +55,7 @@ Rows = ['a', 'b', 'c']
 XIndex = [f"x_{i}" for i in range(0,nIter+1)]
 SecVals = [[MF.Secant(func,X[j][0],X[j][1],i) for i in range(0,nIter+1)] for j in range(0,len(X))]
 Table = pd.DataFrame(SecVals,columns=XIndex,index=Rows)
-# print(Table)
+print(Table)
 
 # 6.10 Hallar la menor raíz positiva de f(x) = 7 sin(x) e^{-x} - 1
 func = lambda x: 7*SIN(x)*E**(-x) - 1

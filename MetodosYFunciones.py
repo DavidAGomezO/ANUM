@@ -1,3 +1,4 @@
+import math
 # Errores, Métodos y Funciones del curso
 
 # Errores
@@ -338,3 +339,75 @@ def ModNewtonRaphson(f:float,df:float,ddf:float,x:float,n:int=1,E:float=100,Iter
     x_a = x
     x = x - (f(x)*df(x))/((df(x))**2 - f(x)*ddf(x))
   return x
+
+# def Pivot(Index:list,a:int,b:int):
+#   t = a
+#   Index[a] = Index[b]
+#   Index[b] = t
+
+# def Elim(Index:list, A:list, a:int, b:int, c:int):
+#   k = A[Index[a]][c]/A[Index[b]][c]
+#   for i in range(0,len(A[0])):
+#     A[Index[a]][i] -= k*A[Index[b]][i]
+
+# Regresiones
+
+def LinealReg(x:list,y:list):
+  n = len(x)
+  SumOfx = sum(x)
+  SumOfy = sum(y)
+  SumOfx2 = sum([i**2 for i in x])
+  SumOfy2 = sum([i**2 for i in y])
+  SumOfxy = sum([x[i]*y[i] for i in range(0,n)])
+  MeanOfy = SumOfy/n
+  MeanOfx = SumOfx/n
+  a_1 = (n*SumOfxy - SumOfx*SumOfy)/(n*SumOfx2 - SumOfx**2)
+  a_0 = MeanOfy - a_1*MeanOfx
+  LinReg = lambda x: a_0 + a_1*x
+  St = sum([(y[i] - LinReg(x[i]))**2 for i in range(0,n)])
+  Syx = math.sqrt(St/(n-2))
+  r = a_1/math.sqrt(n*SumOfy2 - SumOfy**2)
+
+  return a_0,a_1,St,Syx,r
+
+# Interpolaciones
+
+def F(f:list):
+  if len(f) == 1:
+    return f[0][1]
+  if len(f) == 2:
+   return (f[0][1] - f[1][1])/(f[0][0] - f[1][0])
+  return (F(f[1:]) - F(f[:-1]))/(f[-1][0] - f[0][0])
+
+def NewtonIntCoef(f:list, n:int):
+  n += 1
+  if n > len(f):
+    n = len(f)
+  Values = []
+  for i in range(0,n):
+    Values += [F(f[0:i+1])]
+  return Values
+
+def NewtonIntPol(f:list,n:int):
+  Coefs = NewtonIntCoef(f,n)
+  def Polynomial(x):
+    Result = 0
+    for i in range(0,n+1):
+      Temp = [(x - f[j][0]) for j in range(0,i)]
+      Result += Coefs[i]*math.prod(Temp)
+    return Result
+  return Polynomial
+
+def NewtonPolOpt(f:list,n:int):
+  Coefs = NewtonIntCoef(f,n)
+  def Polynomial(x):
+    Result = Coefs[n]
+    i = n
+    while i > 1:
+      Result *= (x - f[i-1][0])
+      Result += Coefs[i-1]
+      i -= 1
+    Result *= (x - f[0][0])
+    Result += Coefs[0]
+    return Result
+  return Polynomial
