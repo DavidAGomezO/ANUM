@@ -645,19 +645,19 @@ def GaussLegendreInt(f,a,b,n):
   if n == 2:
     return (f(x(0.577350269)) + f(x(-0.577350269)))*(b-a)/2
   elif n == 3:
-    return 0.5555556*(f(x(0.774596669)) + f(x(-0.774596669))) + 0.8888889*f(x(0))*(b-a)/2
+    return (0.5555556*(f(x(0.774596669)) + f(x(-0.774596669))) + 0.8888889*f(x(0)))*(b-a)/2
   elif n == 4:
     c = [0.3478548,0.6521452]
     u = [0.339981044,0.861136312]
-    return c[0]*(f(x(-u[1])) + f(x(u[1]))) + c[1]*(f(x(u[0]) + f(x(-u[0]))))
+    return (c[0]*(f(x(-u[1])) + f(x(u[1]))) + c[1]*(f(x(u[0]) + f(x(-u[0])))))*(b-a)/2
   elif n == 5:
     c = [0.2369269,0.4786287,0.5688889]
     u = [0.538469310,0.906179846]
-    return c[0]*(f(x(-u[1])) + f(x(u[1]))) + c[1]*(f(x(-u[0]) + f(x(u[0])))) + c[2]*f(x(0))
+    return (c[0]*(f(x(-u[1])) + f(x(u[1]))) + c[1]*(f(x(-u[0]) + f(x(u[0])))) + c[2]*f(x(0)))*(b-a)/2
   elif n == 6:
     c = [0.1713245,0.3607616,0.4679139]
     u = [0.238619186,0.661209386,0.932469514]
-    return c[0]*(f(x(-u[2])) + f(x(u[2]))) + c[1]*(f(x(-u[1])) + f(x(u[1]))) + c[2]*(f(x(-u[0])) + f(x(u[0])))
+    return (c[0]*(f(x(-u[2])) + f(x(u[2]))) + c[1]*(f(x(-u[1])) + f(x(u[1]))) + c[2]*(f(x(-u[0])) + f(x(u[0]))))*(b-a)/2
 
 # Ecuaciones dif.
 
@@ -775,6 +775,29 @@ def EulerSisDif(x0,xf,Y0:list,h,*args):
 
 
 def RungeKuttaSis(x0,xf,Y0,h,o,*args):
+  """RK para sistemas de ec.
+
+  Parameters
+  ----------
+  x0 : float
+      valor inicial de x
+  xf : float
+      valor final de x
+  Y0 : list[float]
+      valores iniciales de las funciones incógnitas
+  h : float
+      paso de x entre x0 y xf
+  o : orden de RK (2 - 4)
+
+  *args : function(x,y1,...,yn)
+    La función resultante de despejar la primera derivada de cada incógnita
+      
+
+  Returns
+  -------
+  Dict
+      Las funciones incognita aproximadas en diferentes puntos
+  """
   X = [x0 + i*h for i in range(int((xf - x0)/h + 1))]
   Y = [[Y0[i] for _ in range(len(X))] for i in range(len(Y0))]
 
@@ -786,7 +809,7 @@ def RungeKuttaSis(x0,xf,Y0,h,o,*args):
       for j in range(len(Y)):
         k1 = [args[k](*fVals) for k in range(len(Y))]
 
-        fVals = tuple([X[i] + h/2] + [Y[k][i] + k1[k]*h/2 for k in range(len(Y))])
+        fVals = tuple([X[i] + 3*h/4] + [Y[k][i] + k1[k]*3*h/4 for k in range(len(Y))])
         k2 = [args[k](*fVals) for k in range(len(Y))]
 
         Y[j][i+1] = Y[j][i] + (k1[j]/3 + 2*k2[j]/3)*h
@@ -833,9 +856,3 @@ def RungeKuttaSis(x0,xf,Y0,h,o,*args):
   Data['x'] = X
 
   return Data
-
-
-# Ecuaciones elípticas
-
-def Laplacian(f,x0,xf,y0,yf,h):
-  pass
