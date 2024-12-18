@@ -2,19 +2,4 @@
 
 !.gitignore
 
-!README.md
-
-!/**
-
-!**/*.tex
-!**/*.py
-
-**/build/*
-
-*.pdf
-
-/__pycache__
-
-!**/build/*.pdf
-
-!**/*.hs
+!MetodosYFunciones.py
