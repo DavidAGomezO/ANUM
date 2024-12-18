@@ -1,19 +1,28 @@
-import pandas as pd
-import MetodosYFunciones as MF
-import math
+def fax(g):
+  o=g[0]
+  for j in range (len(g)):
+    if g[j]>o:
+      o=g[j]
+  return o
 
+def mix(t):
+  o=t[0]
+  d=0
+  for j in range (len(t)):
+    if t[j]<o:
+      o=t[j]
+      d=j
+  return o,d
 
-mat = [[0 for _ in range(10)] for __ in range(9)]
+def fix(b):
+  pop=[0 for _ in range (len(b))]
+  k=fax(b)
+  for h in range (len(b)):
+    q=mix(b)
+    pop[h]=q[0]
+    b[q[1]]=k
+  return pop
 
-for i in range(9):
-  mat[i][i] = -2.15
-  if i < 8:
-    mat[i][i+1] = 1
-  if i > 0:
-    mat[i][i-1] = 1
+r = [20,32,5,0,2,-1,13]
 
-mat[0][9] = -240
-mat[8][9] = -150
-
-print(MF.GaussSeidel(mat,[0 for _ in range(9)], Diag=True, Err=0.3,Iter=False))
-  
+print(fix(r))
